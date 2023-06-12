@@ -13,10 +13,13 @@ export const crearTarjeta = async countResults => {
   const crearH2 = document.createElement('h2');
   crearH2.classList.add('nombre-pokemon');
 
+  const crearH3 = document.createElement('h3');
+  crearH3.classList.add('text-habilidades');
+
   const crearUl = document.createElement('ul');
   crearUl.classList.add('habilidades-pokemon');
 
-  const array = [crearImg, crearH2, crearUl];
+  const array = [crearImg, crearH2, crearH3, crearUl];
 
   for (let i = 0; i < array.length; i++) {
     obtenerDiv.appendChild(array[i]);

@@ -1,11 +1,12 @@
 import { editarTarjeta } from './editarTarjeta.js';
 import { crearTarjeta } from './tarjeta.js';
-import { activar, desactivar } from './util.js';
+import { configBoton, filtroBusqueda, msgError } from './util.js';
+const pokeball = document.getElementById('inicioImg');
 
 export const buscador = async (busqueda, botonLimpiar) => {
   if (!busqueda || busqueda.split(' ').join('') === '') {
-    activar();
-    botonLimpiar.style.display = 'none';
+    msgError('none');
+    configBoton(pokeball, 'grid');
     return;
   }
 
@@ -13,18 +14,20 @@ export const buscador = async (busqueda, botonLimpiar) => {
   const response = await apiPoke.json();
   const listaPokemones = await response.results;
 
-  const buscarPokemon = listaPokemones.filter(w => w.name.includes(busqueda.split(' ').join('').toLowerCase()))[0];
-  const buscarTarjeta = document.getElementsByClassName('tarjeta-pokemon')[0];
+  const buscarPokemon = filtroBusqueda(listaPokemones, busqueda);
 
-  if (buscarPokemon) {
-    if (buscarTarjeta) {
-      editarTarjeta(buscarPokemon, 0);
-    } else {
-      crearTarjeta(0);
-      editarTarjeta(buscarPokemon, 0);
+  if (buscarPokemon.length >= 1) {
+    for (let i = 0; i < buscarPokemon.length; i++) {
+      crearTarjeta(i);
+      editarTarjeta(buscarPokemon[i], i);
     }
-    botonLimpiar.style.display = 'block';
+    configBoton(botonLimpiar, 'block')
+    msgError('none')
   } else {
-    botonLimpiar.style.display = 'none';
+    configBoton(botonLimpiar, 'none')
+    msgError('grid')
   }
 };
+
+//const buscarPokemon = listaPokemones.filter(w => similarPokemon(w.name, busqueda));
+//const buscarPokemon = listaPokemones.filter(w => w.name.includes(busqueda.split(' ').join('').toLowerCase()));

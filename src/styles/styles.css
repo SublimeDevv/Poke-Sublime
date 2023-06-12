@@ -113,6 +113,17 @@ header button {
   font-size: 200px;
 }
 
+#sin-resultados {
+  padding-top: 150px;
+  display: grid;
+  place-items: center;
+  display: none;
+}
+
+#sin-resultados h2 {
+  font-size: 40px;
+}
+
 #celdas-pokemon {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -139,7 +150,18 @@ header button {
 
 .nombre-pokemon {
   color: #333;
-  font-size: 24px;
+  font-size: 25px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.nf-fa-magic {
+  float: left;
+}
+
+.text-habilidades {
+  color: #333;
+  font-size: 22px;
   margin-bottom: 10px;
   text-align: center;
 }
