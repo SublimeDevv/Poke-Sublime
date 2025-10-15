@@ -1,9 +1,8 @@
 #!/bin/bash
 
-echo "🎨 Generando iconos para PWA..."
+echo "Generando iconos para PWA..."
 echo ""
 
-# Verificar si ImageMagick está instalado
 if ! command -v convert &> /dev/null
 then
     echo "⚠️  ImageMagick no está instalado."
@@ -20,19 +19,18 @@ then
     exit 1
 fi
 
-# Verificar si existe el icono fuente
 if [ ! -f "public/pikachu.png" ]; then
     echo "❌ No se encontró public/pikachu.png"
     echo "Por favor, asegúrate de que el archivo existe."
     exit 1
 fi
 
-echo "✅ Generando icon-192.png..."
+echo "Generando icon-192.png..."
 convert public/pikachu.png -resize 192x192 public/icon-192.png
 
-echo "✅ Generando icon-512.png..."
+echo "Generando icon-512.png..."
 convert public/pikachu.png -resize 512x512 public/icon-512.png
 
 echo ""
-echo "✅ ¡Iconos generados exitosamente!"
+echo "¡Iconos generados exitosamente!"
 echo ""

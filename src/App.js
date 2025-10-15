@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import PokemonCard from './components/PokemonCard';
+import Pagination from './components/Pagination';
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
@@ -10,6 +11,8 @@ function App() {
   const [showInitial, setShowInitial] = useState(true);
   const [showError, setShowError] = useState(false);
   const [showClearButton, setShowClearButton] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pokemonsPerPage = 20;
 
   useEffect(() => {
     fetchAllPokemonsList();
@@ -43,6 +46,7 @@ function App() {
     setShowInitial(false);
     setShowError(false);
     setShowClearButton(false);
+    setCurrentPage(1);
 
     if (!searchTerm || searchTerm.trim() === '') {
       setPokemons([]);
@@ -81,6 +85,7 @@ function App() {
     setShowInitial(false);
     setShowError(false);
     setLoading(true);
+    setCurrentPage(1);
 
     try {
       const pokemonDetails = await Promise.all(
@@ -108,7 +113,19 @@ function App() {
     setShowInitial(true);
     setShowError(false);
     setShowClearButton(false);
+    setCurrentPage(1);
   };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Calculate pagination
+  const indexOfLastPokemon = currentPage * pokemonsPerPage;
+  const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage;
+  const currentPokemons = pokemons.slice(indexOfFirstPokemon, indexOfLastPokemon);
+  const totalPages = Math.ceil(pokemons.length / pokemonsPerPage);
 
   return (
     <div className="App">
@@ -165,10 +182,18 @@ function App() {
         )}
 
         <div id="celdas-pokemon">
-          {pokemons.map((pokemon, index) => (
+          {currentPokemons.map((pokemon, index) => (
             <PokemonCard key={index} pokemon={pokemon} />
           ))}
         </div>
+
+        {pokemons.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </main>
 
       <footer>
