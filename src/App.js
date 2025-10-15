@@ -152,7 +152,15 @@ function App() {
 
         {loading && (
           <div className="loading">
-            <h2>Cargando...</h2>
+            <div className="pokeball-loader">
+              <div className="pokeball">
+                <div className="pokeball-top"></div>
+                <div className="pokeball-middle"></div>
+                <div className="pokeball-bottom"></div>
+                <div className="pokeball-button"></div>
+              </div>
+            </div>
+            <h2 className="loading-text">Buscando Pokémones...</h2>
           </div>
         )}
 
