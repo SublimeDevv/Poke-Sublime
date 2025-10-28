@@ -1,0 +1,80 @@
+.notification-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.5s ease-out;
+}
+
+.notification-banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.notification-banner-content i {
+  font-size: 1.5rem;
+  animation: ring 2s ease-in-out infinite;
+}
+
+.notification-banner-content span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.notification-banner-content .btn {
+  background-color: white;
+  color: #667eea;
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.notification-banner-content .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #f8f9fa;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ring {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30% {
+    transform: rotate(-10deg);
+  }
+  20%, 40% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .notification-banner-content {
+    font-size: 0.9rem;
+  }
+  
+  .notification-banner-content i {
+    font-size: 1.2rem;
+  }
+}

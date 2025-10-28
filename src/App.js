@@ -3,6 +3,8 @@ import './App.css';
 import Header from './components/Header';
 import PokemonCard from './components/PokemonCard';
 import Pagination from './components/Pagination';
+import NotificationBanner from './components/NotificationBanner';
+import { requestNotificationPermission, sendPokemonNotification } from './utils/notificationUtils';
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
@@ -12,10 +14,19 @@ function App() {
   const [showError, setShowError] = useState(false);
   const [showClearButton, setShowClearButton] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [notificationPermission, setNotificationPermission] = useState(false);
   const pokemonsPerPage = 20;
 
   useEffect(() => {
     fetchAllPokemonsList();
+    requestNotificationPermission().then(granted => {
+      setNotificationPermission(granted);
+      if (granted) {
+        console.log('Permisos de notificación concedidos');
+      } else {
+        console.log('Permisos de notificación denegados');
+      }
+    });
   }, []);
 
   const fetchAllPokemonsList = async () => {
@@ -69,9 +80,14 @@ function App() {
           }
         })
       );
-      setPokemons(pokemonDetails.filter(p => p !== null));
+      const validPokemons = pokemonDetails.filter(p => p !== null);
+      setPokemons(validPokemons);
       setShowClearButton(true);
       setShowError(false);
+      
+      if (validPokemons.length > 0 && notificationPermission) {
+        sendPokemonNotification(validPokemons[0]);
+      }
     } else {
       setPokemons([]);
       setShowError(true);
@@ -130,6 +146,10 @@ function App() {
   return (
     <div className="App">
       <Header onSearch={handleSearch} />
+      <NotificationBanner 
+        hasPermission={notificationPermission}
+        onPermissionChange={setNotificationPermission}
+      />
       
       <main id="principal">
         <div id="buttonsCtl">

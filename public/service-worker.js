@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 
-const CACHE_NAME = 'sublime-poke-v1';
+const CACHE_NAME = 'sublime-poke-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -75,4 +75,76 @@ self.addEventListener('activate', event => {
     })
   );
   self.clients.claim();
+});
+
+// Handle notification click events
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  if (event.action === 'view') {
+    // Abrir o enfocar la aplicación
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true })
+        .then(clientList => {
+          // Si ya hay una ventana abierta, enfocarla
+          for (let i = 0; i < clientList.length; i++) {
+            const client = clientList[i];
+            if (client.url.includes(self.location.origin) && 'focus' in client) {
+              return client.focus();
+            }
+          }
+          // Si no hay ventana abierta, abrir una nueva
+          if (clients.openWindow) {
+            return clients.openWindow('/');
+          }
+        })
+    );
+  } else if (event.action === 'close') {
+    // Solo cerrar la notificación (ya se hizo arriba)
+    return;
+  } else {
+    // Click en el cuerpo de la notificación (sin acción específica)
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true })
+        .then(clientList => {
+          for (let i = 0; i < clientList.length; i++) {
+            const client = clientList[i];
+            if (client.url.includes(self.location.origin) && 'focus' in client) {
+              return client.focus();
+            }
+          }
+          if (clients.openWindow) {
+            return clients.openWindow('/');
+          }
+        })
+    );
+  }
+});
+
+// Handle push notifications (para notificaciones push desde servidor)
+self.addEventListener('push', event => {
+  let notificationData = {
+    title: 'Sublime Poke',
+    body: 'Nueva actualización disponible',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png'
+  };
+
+  if (event.data) {
+    try {
+      notificationData = event.data.json();
+    } catch (e) {
+      notificationData.body = event.data.text();
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, {
+      body: notificationData.body,
+      icon: notificationData.icon || '/icon-192.png',
+      badge: notificationData.badge || '/icon-192.png',
+      vibrate: [200, 100, 200],
+      data: notificationData.data
+    })
+  );
 });
